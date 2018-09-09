@@ -21,3 +21,13 @@ docker run -p 8080:8080 -i {image-id}
 ```
 
 This will map your local port 8080 to the one from the running container. You will be able to access the hosted site by going to `localhost:8080`.
+
+## FAQ
+
+### Can I map the tool to a different port?
+
+Yes. You can change the `docker run` port mapping target. Keep in mind that you also need to update the `Dockefile` to change what `socat` uses as the target port.
+
+### Why does `socat` run when I start the container?
+
+By default, DocFX serves the site on `127.0.0.1` - this would mean that we wouldn't be able to access the site from outside the container (the connection will always be reset). To prevent that, we use [`socat`](https://linux.die.net/man/1/socat) as a relay.
