@@ -1,4 +1,6 @@
 FROM ubuntu:18.04
+ARG LIBRARY=@azure/cosmos
+ARG LIBRARY_FOLDER=src
 RUN apt-get update \
     && apt-get install nodejs --yes \
     && apt-get install npm --yes \
@@ -20,7 +22,7 @@ RUN apt-get update \
     && npm install typedoc --save-dev --global \
     && npm install type2docfx --save-dev --global \
     && npm install @azure/cosmos --prefix _package \
-    && typedoc --mode file --json _output.json _package/node_modules/@azure/cosmos/src -ignoreCompilerErrors \
+    && typedoc --mode file --json _output.json _package/node_modules/$LIBRARY/$LIBRARY_FOLDER -ignoreCompilerErrors \
     && type2docfx _output.json _yaml \
     && cp -a _yaml/. _docs/docfx_project/api/ \
     && cd _docs/docfx_project \
