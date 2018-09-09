@@ -10,4 +10,14 @@ You can build an image by simply calling:
 docker build --build-arg LIBRARY=@azure/cosmos --build-arg LIBRARY_FOLDER=src .
 ```
 
-This command can be executed directly from the folder with the `Dockerfile`.
+This command can be executed directly from the folder with the `Dockerfile`. For the `LIBRARY` argument, you need to pass the library ID the same way it is indexed on `npm`. For `LIBRARY_FOLDER` you need to specify the library folder that needs to be documented - the default will always be `src`.
+
+## Running an image
+
+Once you get the image created, you can run it with the help of:
+
+```bash
+docker run -p 8080:8080 -i {image-id}
+```
+
+This will map your local port 8080 to the one from the running container. You will be able to access the hosted site by going to `localhost:8080`.
