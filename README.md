@@ -35,3 +35,7 @@ Yes. You can change the `docker run` port mapping target. Keep in mind that you 
 ### Why does `socat` run when I start the container?
 
 By default, DocFX serves the site on `127.0.0.1` - this would mean that we wouldn't be able to access the site from outside the container (the connection will always be reset). To prevent that, we use [`socat`](https://linux.die.net/man/1/socat) as a relay.
+
+## Logo
+
+Logo is derived from work of [Kokota on IconFinder](https://www.iconfinder.com/icons/792241/box_cargo_cart_deliver_package_warehouse_icon), as well as [bamikon on IconFinder](https://www.iconfinder.com/icons/2824439/book_note_paper_school_icon).
