@@ -2,6 +2,7 @@ FROM ubuntu:18.04
 SHELL ["/bin/bash", "-c"] 
 ARG LIBRARY=@azure/cosmos
 ARG LIBRARY_FOLDER=lib
+EXPOSE 1900
 RUN apt-get update \
     && apt-get install nodejs --yes \
     && apt-get install npm --yes \
@@ -11,7 +12,7 @@ RUN apt-get update \
     && apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF \
     && echo "deb https://download.mono-project.com/repo/ubuntu stable-bionic main" | tee /etc/apt/sources.list.d/mono-official-stable.list \
     && apt update \
-    && apt install mono-complete --yes \
+    && apt install mono-devel --yes \
     && mkdir munseo \
     && cd munseo \
     && wget https://github.com/dotnet/docfx/releases/download/v2.39.1/docfx.zip \
@@ -40,5 +41,5 @@ RUN apt-get update \
     && cd ../../../../_docs/docfx_project \
     && mono ../../_docfx/docfx.exe \
     && cd ../.. \
-    && echo "socat TCP4-LISTEN:8080,bind=`hostname -I | tr -d '[:space:]'`,fork TCP4:localhost:8080 &\ncd /munseo/_docs/docfx_project\nmono ../../_docfx/docfx.exe serve _site" >> rundocs.sh
+    && echo -e "socat TCP-LISTEN:1900,fork,reuseaddr TCP:localhost:8080 &\ncd /munseo/_docs/docfx_project\nmono ../../_docfx/docfx.exe serve _site" >> rundocs.sh
 ENTRYPOINT ["sh", "/munseo/rundocs.sh"]

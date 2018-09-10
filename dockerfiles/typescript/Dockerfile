@@ -1,6 +1,7 @@
 FROM ubuntu:18.04
 ARG LIBRARY=@azure/cosmos
 ARG LIBRARY_FOLDER=src
+EXPOSE 1900
 RUN apt-get update \
     && apt-get install nodejs --yes \
     && apt-get install npm --yes \
@@ -28,5 +29,5 @@ RUN apt-get update \
     && cd _docs/docfx_project \
     && mono ../../_docfx/docfx.exe \
     && cd ../.. \
-    && echo "socat TCP4-LISTEN:8080,bind=`hostname -I | tr -d '[:space:]'`,fork TCP4:localhost:8080 &\ncd /munseo/_docs/docfx_project\nmono ../../_docfx/docfx.exe serve _site" >> rundocs.sh
+    && echo -e "socat TCP4-LISTEN:1900,bind=`hostname -I | tr -d '[:space:]'`,fork TCP4:localhost:8080 &\ncd /munseo/_docs/docfx_project\nmono ../../_docfx/docfx.exe serve _site" >> rundocs.sh
 ENTRYPOINT ["sh", "/munseo/rundocs.sh"]

@@ -17,10 +17,14 @@ This command can be executed directly from the folder with the `Dockerfile`. For
 Once you get the image created, you can run it with the help of:
 
 ```bash
-docker run -p 8080:8080 -i {image-id}
+docker run -p 80:1900 -i {image-id}
 ```
 
-This will map your local port 8080 to the one from the running container. You will be able to access the hosted site by going to `localhost:8080`.
+This will map your local port 80 to port 1900 from the running container. You will be able to access the hosted site by going to `http://localhost`.
+
+![Launch animation](demo-animation.gif)
+
+Of course, you can make adjustments to change the target port.
 
 ## FAQ
 
