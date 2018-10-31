@@ -1,7 +1,5 @@
 FROM ubuntu:18.04
-SHELL ["/bin/bash", "-c"] 
-ARG LIBRARY=@azure/cosmos
-ARG LIBRARY_FOLDER=lib
+SHELL ["/bin/bash", "-c"]
 EXPOSE 1900
 RUN apt-get update \
     && apt-get install nodejs --yes \
@@ -12,8 +10,8 @@ RUN apt-get update \
     && apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF \
     && echo "deb https://download.mono-project.com/repo/ubuntu stable-bionic main" | tee /etc/apt/sources.list.d/mono-official-stable.list \
     && apt update \
-    && apt install mono-devel --yes \
-    && mkdir munseo \
+    && apt install mono-devel --yes
+RUN mkdir munseo \
     && cd munseo \
     && wget https://github.com/dotnet/docfx/releases/download/v2.39.1/docfx.zip \
     && unzip docfx.zip -d _docfx \
@@ -22,8 +20,11 @@ RUN apt-get update \
     && mono ../_docfx/docfx.exe init -q \
     && cd .. \
     && echo "Installing node2docfx..." \
-    && npm install node2docfx --prefix _ntod \
-    && echo "Installing library..." \
+    && npm install node2docfx --prefix _ntod
+ARG LIBRARY=@azure/cosmos
+ARG LIBRARY_FOLDER=lib
+RUN echo "Installing library..." \
+    && cd /munseo \
     && npm install $LIBRARY --prefix _package \
     && echo "Starting processing..." \
     && cd _package/node_modules/$LIBRARY \

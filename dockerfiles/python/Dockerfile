@@ -1,7 +1,5 @@
 FROM ubuntu:18.04
 SHELL ["/bin/bash", "-c"]
-ARG LIBRARY=https://github.com/Azure/azure-storage-python
-ARG LIBRARY_FOLDER=azure-storage-blob
 EXPOSE 1900
 RUN apt-get update \
     && apt-get install python3.6 --yes \
@@ -21,8 +19,10 @@ RUN mkdir munseo \
     && unzip docfx.zip -d _docfx \
     && mkdir _docs \
     && cd _docs \
-    && mono ../_docfx/docfx.exe init -q \
-    && cd .. \
+    && mono ../_docfx/docfx.exe init -q
+ARG LIBRARY=https://github.com/Azure/azure-storage-python
+ARG LIBRARY_FOLDER=azure-storage-blob
+RUN cd /munseo \
     && mkdir _project \
     && git clone $LIBRARY _project \
     && pip3 install sphinx-docfx-yaml \
@@ -43,7 +43,6 @@ RUN mkdir munseo \
     && cp -a _build/docfx_yaml/. ../../_docs/docfx_project/api/ \
     && cd ../../_docs/docfx_project \
     && mono ../../_docfx/docfx.exe \
-    && cd ../..
-ADD rundocs.sh /munseo/rundocs.sh
-RUN ["chmod", "+x", "/munseo/rundocs.sh"]
-ENTRYPOINT ["/munseo/rundocs.sh"]
+    && cd ../.. \
+    && echo -e "socat TCP-LISTEN:1900,fork,reuseaddr TCP:localhost:8080 &\ncd /munseo/_docs/docfx_project\nmono ../../_docfx/docfx.exe serve _site" >> rundocs.sh
+ENTRYPOINT ["sh", "/munseo/rundocs.sh"]
